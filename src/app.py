@@ -10,7 +10,10 @@ def connect_db(db_file: str) -> sqlite3.Connection:
         print(e)
     return None
 
-def get_students_EIU():
+# TO DO: find a way to refactor this whole function in order to make it work for the other plots
+# Hint: get the attribute directly from cols 
+# Hint: split the function into two: one for querying and another for plotting
+def get_students_EIU() -> None:
     query = dat.execute('''
         SELECT Opcion.titulo AS Titulo
         FROM Encuesta
