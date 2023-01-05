@@ -10,7 +10,7 @@ def get_sql(dat: sqlite3.Connection, sql_script: str) -> None:
 
 def show_plot(query: str, cols: list, title: str, xlabel: str, ylabel: str) -> None:
     results = pd.DataFrame.from_records(data=query.fetchall(), columns=cols)
-    results.groupby(['Titulo']).size().plot(kind='pie', y='Titulo', autopct='%1.1f%%')
+    results.groupby(['Titulo']).size().plot(kind='pie', y='Titulo', autopct='%1.1f%%', title=title)
     plt.show()
 
 def get_students_EIU(dat: sqlite3.Connection) -> None:
