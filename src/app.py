@@ -3,17 +3,20 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 
-def connect_db(db_file: str) -> sqlite3.Connection:
-    try:
-        return sqlite3.connect(db_file)
-    except sqlite3.Error as e:
-        print(e)
-    return None
 
 # TO DO: find a way to refactor this whole function in order to make it work for the other plots
 # Hint: get the attribute directly from cols 
 # Hint: split the function into two: one for querying and another for plotting
-def get_students_EIU() -> None:
+
+# def show_plot(query: str, cols: list, title: str, xlabel: str, ylabel: str) -> None:
+#     results = pd.DataFrame.from_records(data=query.fetchall(), columns=cols)
+#     results.groupby(['Titulo']).size().plot(kind='pie', y='Titulo', autopct='%1.1f%%')
+#     plt.show()
+
+# def query_db(query: str) -> sqlite3.Cursor:
+#     return dat.execute(query)
+
+def get_students_EIU(dat) -> None:
     query = dat.execute('''
         SELECT Opcion.titulo AS Titulo
         FROM Encuesta
@@ -30,6 +33,14 @@ def get_students_EIU() -> None:
     results.groupby(['Titulo']).size().plot(kind='pie', y='Titulo', autopct='%1.1f%%')
     plt.show()
 
+def main() -> None:
+    try:
+        dat = sqlite3.connect('data/datos.s3db')
+        get_students_EIU(dat)
+    except sqlite3.Error as e:
+        print(e)
+    finally:
+        dat.close()
+
 if __name__ == '__main__':
-    dat = connect_db('datos.s3db')
-    get_students_EIU()
+    main()
