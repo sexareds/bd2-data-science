@@ -20,7 +20,6 @@ def get_students_EIU(dat: sqlite3.Connection) -> None:
 def main() -> None:
     try:
         dat = sqlite3.connect('data/datos.s3db')
-        print(type(dat))
         get_students_EIU(dat)
     except sqlite3.Error as e:
         print(e)
