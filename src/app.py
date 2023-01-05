@@ -33,9 +33,6 @@ def get_students_EIU() -> None:
     plt.title('¿Conocen los estudiantes el programa de "Estudiante Integral Ucabista"?')
     plt.show()
 
-
-
-
 if __name__ == '__main__':
-    dat = connect_db('datos.s3db')
+    dat = connect_db('data/datos.s3db')
     get_students_EIU()
