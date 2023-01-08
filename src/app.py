@@ -9,15 +9,14 @@ def get_table(dat: sqlite3.Connection, sql_script: str) -> pd.DataFrame:
     df = pd.DataFrame.from_records(data=query.fetchall(), columns=cols)
     return df
 
-def data_cleaning():
-    # delete all rows with null values
-    # df = df.dropna()
-    # delete especial characters
-    # for column in df.columns:
-    #     df = df[column].str.replace(r'\w', '')
-    # lower case all columns of the dataframe
-    # df = df.apply(lambda x: x.str.lower() if x.dtype == "object" else x)  
-    pass
+def data_cleaning(df: pd.DataFrame) -> pd.DataFrame:
+    df = df.apply(lambda x: x.str.lower() if x.dtype == "object" else x)
+    df = df.dropna()
+    for column in df.columns:
+        df[column] = df[column].str.replace(r'\W', '', regex=True)
+    for column in df.columns:
+        df[column] = df[df[column].str.strip().astype(bool)] 
+    return df
 
 def q_1(dat: sqlite3.Connection) -> None:
     df = get_table(dat, sql_scripts.sql_script_1)
@@ -30,6 +29,7 @@ def q_1(dat: sqlite3.Connection) -> None:
 
 def q_2(dat: sqlite3.Connection) -> None:
     df = get_table(dat, sql_scripts.sql_script_2) 
+    df = data_cleaning(df)
     print(df)
     df.groupby(['respuesta']).size().plot(kind='pie', subplots=True, autopct='%1.1f%%')
     plt.title('Cualidades que debe poseer un EIU')
@@ -37,6 +37,7 @@ def q_2(dat: sqlite3.Connection) -> None:
 
 def q_3(dat: sqlite3.Connection) -> None:
     df = get_table(dat, sql_scripts.sql_script_3)
+    df = data_cleaning(df)
     df = df.value_counts().reset_index(name='votos')
     df = df.set_index('respuesta').head(15)
     print(df)
